@@ -5,8 +5,6 @@ use think\Controller;
 class User extends Controller {
 	
 	public function login(){
-		$ip = db('intercept')->order('id desc')->find();
-		check_ip($ip['rule']);
 		return view();
 	}
 	/**

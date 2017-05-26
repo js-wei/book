@@ -8,13 +8,13 @@
                 <if condition="$controller eq 'single' and $vo['id']==$aid ">class="active"</if></empty>>
                 <a href="<eq name='vo.col' value='0'>{:Url($vo['title'].'/index')}<else />{:Url('article/index?aid='.$vo['id'])}</eq>">
                     <i class="menu-icon <notempty name='vo.ico'>fa {$vo.ico}<else />glyphicon glyphicon-tasks</notempty>"></i>
-                    <span class="menu-text fa {$vo.ico}"><eq name='vo.col' value='0'>{$vo.name}<else />{$vo.title}</eq></span>
+                    <span class="menu-text <if condition="strstr($vo['ico'],'fa')">fa</if> {$vo.ico}"><eq name='vo.col' value='0'>{$vo.name}<else />{$vo.title}</eq></span>
                 </a>
             </li>
             <else />
             <li <eq name="controller" value="$vo['title']">class="active open"</eq>>
                 <a href="javascript:void(0);" class="menu-dropdown">
-                    <i class="menu-icon <notempty name='vo.ico'>fa {$vo.ico}<else />glyphicon glyphicon-tasks</notempty>"></i>
+                    <i class="menu-icon <notempty name='vo.ico'><if condition="strstr($vo['ico'],'fa')">fa</if> {$vo.ico}</notempty>"></i>
                     <span class="menu-text"><eq name='vo.col' value='0'>{$vo.name}<else />{$vo.title}</eq></span>
                 </a>
                 <ul class="submenu">
@@ -31,7 +31,7 @@
                                     <eq name='vo1.type' value='4'>{:Url('corve/index?aid='.$vo1['id'])}</eq>
                                     <eq name='vo1.type' value='5'>{:Url('form/index?aid='.$vo1['id'])}</eq>
                                     </eq>">
-                                    <span class="menu-text fa {$vo1.ico}">&nbsp;<eq name='vo1.col' value='0'>{$vo1.name}<else />{$vo1.title}</eq></span>
+                                    <span class="menu-text <if condition="strstr($vo1['ico'],'fa')">fa</if> {$vo1.ico}"><eq name='vo1.col' value='0'>{$vo1.name}<else />{$vo1.title}</eq></span>
                                 </a>
                             </li>
                             <else />
@@ -44,8 +44,8 @@
                                     <volist name="vo1.child" id="vo2">
                                         <li <eq name="action" value="$vo2['title']">class="active"</eq><eq name="action" value="add">class="active"</eq>>
                                             <a href="<eq name='vo2.col' value='0'>{:Url($vo1['name'].'/'.$vo2['name'])}<else />{:Url('article/index?aid='.$vo['id'])}</eq>">
-                                                <i class="menu-icon <notempty name='vo2.ico'>fa {$vo2.ico}<else />glyphicon glyphicon-tasks</notempty>"></i>
-                                                <span class="menu-text fa {$vo2.ico}">&nbsp;<eq name='vo2.col' value='0'>{$vo2.name}<else />{$vo2.title}</eq></span>
+                                                <i class="menu-icon <notempty name='vo2.ico'>{$vo2.ico}</notempty>"></i>
+                                                <span class="menu-text {$vo2.ico}"><eq name='vo2.col' value='0'>{$vo2.name}<else />{$vo2.title}</eq></span>
                                             </a>
                                         </li>
                                     </volist>
@@ -57,22 +57,6 @@
             </li>
         </empty>
     </volist>
-    <li>
-    	<a href="javascript:void(0);" class="menu-dropdown">
-            <i class="menu-icon fa fa-file"></i>
-            <span class="menu-text">文档管理</span>
-       </a>
-        <ul class="submenu">
-            <volist name="col" id="cols">
-		     	<li <if condition="$controller eq 'article' and $cols['id'] eq $aid or $controller eq 'single' and $cols['id'] eq $aid">class="active"</if>>
-	                <a href="{:Url('article/index?aid='.$cols['id'])}">
-	                	<i class="menu-icon fa fa-file-o"></i>
-	                    <span class="menu-text">{$cols.title}</span>
-	                </a>
-	            </li>
-	    	</volist>                   
-        </ul>
-    </li>
 </ul>
 <!-- /Sidebar Menu -->
 </div>

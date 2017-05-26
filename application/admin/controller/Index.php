@@ -11,7 +11,6 @@ class Index extends Base {
 	}
 
 	public function index(){
-		//p($this->site);die;
 		$os = $this->_sys();
 		$this->assign('os',$os);
 		return view();

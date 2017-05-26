@@ -94,6 +94,8 @@
 	$(function(){
 		$('#simpledatatable').dataTable({
 	        "sDom": "Tflt",
+	        "paging":false,
+	        "searching":false,
 	        "iDisplayLength": {$count},
 	        "oTableTools": {
 	            "aButtons": [
@@ -103,6 +105,7 @@
 	        },
 	        "language": {
 	            "search": "",
+                "sEmptyTable": "暂无数据",
 	            "sLengthMenu": "_MENU_",
 	            "oPaginate": {
 	                "sPrevious": "Prev",

@@ -60,64 +60,67 @@ Purchase: http://wrapbootstrap.com
     <script src="__JS__/jquery-2.0.3.min.js"></script>
     <script src="__JS__/bootstrap.min.js"></script>
     <script src="__JS__/validation/bootstrapValidator.js"></script>
-    <js file="__PLUG__/layer/layer.js"/>
+   	<link rel="stylesheet" type="text/css" href="__PLUG__/layui/css/layui.css"/>
+    <script src="__PLUG__/layui/layui.js"></script>
     <script type="text/javascript">
         $(function(){
-            $('form').bootstrapValidator({
-                excluded: [':disabled'],
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    username: {
-                        validators: {
-                            notEmpty: {
-                                message: '请输入正确的邮箱地址'
-                            },
-                            emailAddress: {
-                                message: '输入不是有效的邮箱地址'
-                            }
-                        }
-                    },
-                    password: {
-                        validators: {
-                            notEmpty: {
-                                message: '请输入密码'
-                            }
-                        }
-                    },
-                    verify: {
-                        validators: {
-                            notEmpty: {
-                                message: '请输入验证码'
-                            }
-                        }
-                    }
-                }
-            });
-           
-            $('.loginbox-submit input[type="submit"]').click(function(e) {
-                e.preventDefault();
-                var bootstrapValidator = $("form").data('bootstrapValidator');
-                bootstrapValidator.validate();
-                if(bootstrapValidator.isValid()){
-                    var index = layer.load(2,{
-                        shard:[0.9,"#000"]
-                    });
-                    $.post($('form').attr('action'),$('form').serialize(),function(result){
-                        layer.close(index);
-                        if(result.status==0){
-                             layer.alert(result.msg,{icon:5});
-                        }else{
-                            layer.alert(result.msg,{icon:6,end:function(){
-                                window.location.href=result.redirect;
-                            }});
-                        }
-                    });
-                }
-            });  
+        	layui.use('layer', function(){
+        		$('form').bootstrapValidator({
+	                excluded: [':disabled'],
+	                feedbackIcons: {
+	                    valid: 'glyphicon glyphicon-ok',
+	                    invalid: 'glyphicon glyphicon-remove',
+	                    validating: 'glyphicon glyphicon-refresh'
+	                },
+	                fields: {
+	                    username: {
+	                        validators: {
+	                            notEmpty: {
+	                                message: '请输入正确的邮箱地址'
+	                            },
+	                            emailAddress: {
+	                                message: '输入不是有效的邮箱地址'
+	                            }
+	                        }
+	                    },
+	                    password: {
+	                        validators: {
+	                            notEmpty: {
+	                                message: '请输入密码'
+	                            }
+	                        }
+	                    },
+	                    verify: {
+	                        validators: {
+	                            notEmpty: {
+	                                message: '请输入验证码'
+	                            }
+	                        }
+	                    }
+	                }
+	            });
+	           
+	            $('.loginbox-submit input[type="submit"]').click(function(e) {
+	                e.preventDefault();
+	                var bootstrapValidator = $("form").data('bootstrapValidator');
+	                bootstrapValidator.validate();
+	                if(bootstrapValidator.isValid()){
+	                    var index = layer.load(2,{
+	                        shard:[0.9,"#000"]
+	                    });
+	                    $.post($('form').attr('action'),$('form').serialize(),function(result){
+	                        layer.close(index);
+	                        if(result.status==0){
+	                             layer.alert(result.msg,{icon:5});
+	                        }else{
+	                            layer.alert(result.msg,{icon:6,end:function(){
+	                                window.location.href=result.redirect;
+	                            }});
+	                        }
+	                    });
+	                }
+	            }); 
+        	});
         });
     </script>
 </body>

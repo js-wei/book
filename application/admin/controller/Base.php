@@ -8,7 +8,6 @@ class Base extends Controller{
 	protected function _initialize(){
 		header('Content-type:text/html;charset=utf-8;');
 		set_time_limit(0);
-      
 		//常用变量
 		$this->action = request()->action();
 		$this->controller = request()->controller();
@@ -17,44 +16,54 @@ class Base extends Controller{
 		$this->check_priv(); 
 		//获取功能导航
 		$nav = $this->auth_list();
-		//获取栏目导航
-		$col = $this->column_list();
+		
+		$this->_search();
         //获取网站配置
         $this->site = db('Config')->order('id desc')->find();
-        $ip = db('intercept')->field('rule,status')->order('id desc')->find();
-		if(!$ip['status']){
-			check_ip($ip['rule']);
-		}
-		//$nav = array_merge($nav,$col);
 		//输出导航
 		$this->assign('site',$this->site);
 		$this->assign('nav',$nav);
-		$this->assign('col',$col);
 		$this->assign('action',strtolower($this->action));
 		$this->assign('controller',strtolower($this->controller));
 		$this->assign('module',strtolower($this->module));
 	}
+	
+	
 	/**
-	 * [column_list 获取栏目数据]
-	 * @return [type] [description]
+	 * 组织搜索
 	 */
-	protected function column_list(){
-		$column=db("column")->where('status=0 and type!=6')->order('id asc')->select();
-		foreach ($column as $k => $v) {
-			$column[$k]['col']=1;
+	protected function _search($param=[]){
+		$where=[];
+		if(empty($param)){
+			$param = request()->param();
 		}
-		$column= \service\Category::unlimitedForLevel($column);
-		return $column;
+		if(!empty($param['s_keywords'])){
+			$where['title']=['like',"%".$param['s_keywords']."%"];
+		}
+		if(!empty($param['s_status'])){
+			$where['status']=$param['s_status'];
+		}
+		if(!empty($param['s_date'])){
+			$date = explode('-',$param['s_date']);
+			$where['date']=['between',[$date[0],$date[1]]];
+		}
+		$this->assign('search',[
+			's_keywords'=>!empty($param['s_keywords'])?$param['s_keywords']:'',
+			's_date'=>!empty($param['s_date'])?$param['s_date']:'',
+			's_status'=>!empty($param['s_status'])?$param['s_status']:''
+		]);
+		return $where;
 	}
+
 	/**
 	 * [auth_list 获取功能栏目]
 	 * @return [type] [description]
 	 */
 	protected function auth_list(){
-        $user = Session::get('_id');
+        $user = Session::get('_logined');
         $gid = $user['gid'];
         $this->gid =$gid; 
-
+		session('_gid',$gid);
         $nav=array();
         if($gid!=-1 && !empty($gid)){
             $model = db('model')->where('fid=0 and "show"=0 and status=0 and id in('.$gid.')')->select();
@@ -62,11 +71,11 @@ class Base extends Controller{
             $model = db('model')->where('fid=0 and "show"=0 and status=0')->select();
         }
 
-		foreach ($model as  $v) {
+		foreach ($model as $v) {
 			$map['fid']=$v['id'];
 			$map['status']=0;
             $map['show']=0;
-			$child=db('model')->where($map)->order('sort asc')->select();
+			$child=db('model')->where($map)->order('sort asc,id asc')->select();
 			foreach ($child as $k1 => $v1) {
 				$child[$k1]['col']=0;
 			}
@@ -99,7 +108,7 @@ class Base extends Controller{
 	 * @param  string $img         [删除图片]
 	 * @return [type]              [description]
 	 */
-    protected function _status($id,$model='',$t='',$img='image',$redirect=''){
+    protected function _status($id,$model='',$t='',$img='image',$redirect='',$prf=''){
         $id = $id?$id:input('k');
         $where['id']=array('in',$id);
         $redirect = $redirect?$redirect:Url('index');   //跳转地址
@@ -107,7 +116,7 @@ class Base extends Controller{
 		
         switch($t){
             case 'enable':            //启用
-                $result = $m->where($where)->update(array('status'=>0));
+                $result = $m->where($where)->update(array($prf.'status'=>0));
                 if(!$result){
                     return ['status'=>0,'msg'=>'启用失败'];
                 }else{
@@ -115,12 +124,20 @@ class Base extends Controller{
                 }
                 break;
             case 'forbidden':        //禁用
-                $result = $m->where($where)->update(array('status'=>1));
+                $result = $m->where($where)->update(array($prf.'status'=>1));
                 if(!$result){
                    return ['status'=>0,'msg'=>'禁用失败'];
                 }
                 return ['status'=>1,'msg'=>'禁用成功','redirect'=>$redirect];
                 break;
+			case 'lost':
+				$result = $m->where($where)->update(array($prf.'status'=>2));
+                if(!$result){
+                    return ['status'=>0,'msg'=>'挂失失败'];
+                }else{
+                   return ['status'=>1,'msg'=>'挂失成功','redirect'=>$redirect];
+                }
+				break;
             case 'delete':           //删除
                 $upload = new Uploadify();
                 $flag =true;
