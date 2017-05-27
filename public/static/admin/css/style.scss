@@ -1,0 +1,38 @@
+$color: #fff red orange #428bca;
+.container-fluid{
+    margin-top:150px;
+    .text-center{
+        width:550px;
+        margin:0 auto;
+        h1{
+            font-size:30px;
+            margin-bottom:10px;
+        }
+        .bookmark{
+            height:80px;
+            line-height:80px;
+            color:nth($color,1);
+        }
+        .bookmark01{
+            width:250px;
+            height:350px;
+            line-height:350px;
+            background-color:darken(nth($color,2),10%);
+            float:left;
+        }
+        .bookmark02{
+            width:250px;
+            height:150px;
+            line-height:150px;
+            background-color:darken(nth($color,3),10%);
+            float:left;
+        }
+        .bookmark03{
+            width:250px;
+            height:200px;
+            line-height:200px;
+            background-color:darken(nth($color,4),10%);
+            float:left;
+        }
+    }
+}

@@ -90,7 +90,6 @@ class Base extends Controller{
 	 * @return [type] [description]
 	 */
 	protected function check_priv() {
-		//p(Request::instance()->session());die;
 		if(!Session::has('_logined')){
 			$this->redirect('user/login');
 		}else{

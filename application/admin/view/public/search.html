@@ -19,9 +19,11 @@
       <div class="col-xs-12 col-md-4 col-lg-2 mt10" style="padding:0">
         <select name="s_status" style="padding-right:0">
             <option value="-1">--全部--</option>
-            <option value="0" <eq name="search.s_status" value="0">selected</eq>>启用</option>
+            <option value="0" <eq name="search.s_status" value="0">selected</eq><eq name="search.s_status" value="">selected</eq>>启用</option>
             <option value="1" <eq name="search.s_status" value="1">selected</eq>>禁用</option>
-            <eq name="controller" value="reader"><option value="2" <eq name="search.s_status" value="2">selected</eq>>挂失</option></eq>
+            <if condition="$action eq 'index' and $controller eq 'reader'">
+            	<option value="2" <eq name="search.s_status" value="2">selected</eq>>挂失</option>
+            </if>
         </select>
       </div>
       <button type="button" class="btn btn-primary onSearch mt10">搜素</button>
