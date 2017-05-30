@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2017-05-27 16:57:16
--- 服务器版本： 5.5.48-log
+-- Generation Time: 2017-05-31 02:18:41
+-- 服务器版本： 5.7.11-log
 -- PHP Version: 7.1.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `think_admin` (
 --
 
 INSERT INTO `think_admin` (`id`, `gid`, `username`, `password`, `hash`, `status`, `date`, `last_date`, `last_ip`, `dates`) VALUES
-(1, '-1', '524314430@qq.com', 'ba59abbe56e057f', '', 0, 1486708840, 1495870832, '192.168.5.1', 0),
+(1, '-1', '524314430@qq.com', 'ba59abbe56e057f', '', 0, 1486708840, 1496102759, '192.168.235.1', 0),
 (3, '52,49', 'test@qq.com', 'ba59abbe56e057f', '', 0, 1495856916, 1495857467, '192.168.5.1', 0);
 
 -- --------------------------------------------------------
@@ -82,6 +82,24 @@ INSERT INTO `think_book` (`id`, `book_name`, `book_cate`, `book_desc`, `book_no`
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `think_borrow`
+--
+
+CREATE TABLE IF NOT EXISTS `think_borrow` (
+  `id` int(11) NOT NULL COMMENT '主键',
+  `bor_rid` int(11) NOT NULL DEFAULT '0' COMMENT '借书人',
+  `bor_bid` int(11) NOT NULL DEFAULT '0' COMMENT '书籍id',
+  `bor_count` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
+  `bor_date` int(11) NOT NULL DEFAULT '0' COMMENT '借书时间',
+  `bor_gdate` int(11) NOT NULL DEFAULT '0' COMMENT '还书时间',
+  `bor_status` int(11) NOT NULL DEFAULT '0' COMMENT '是否还书',
+  `bor_notify` int(11) NOT NULL DEFAULT '0' COMMENT '是否通知过期',
+  `dates` int(11) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='借书表';
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `think_category`
 --
 
@@ -115,6 +133,8 @@ CREATE TABLE IF NOT EXISTS `think_config` (
   `id` int(11) NOT NULL COMMENT '主键，自增长',
   `title` varchar(150) NOT NULL COMMENT '网站名',
   `price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `count` int(11) NOT NULL DEFAULT '10' COMMENT '最大借书数',
+  `time` int(11) NOT NULL DEFAULT '15' COMMENT '借书天数：默认15天',
   `date` int(10) NOT NULL COMMENT '修改日期',
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `dates` int(11) NOT NULL
@@ -124,8 +144,8 @@ CREATE TABLE IF NOT EXISTS `think_config` (
 -- 转存表中的数据 `think_config`
 --
 
-INSERT INTO `think_config` (`id`, `title`, `price`, `date`, `status`, `dates`) VALUES
-(1, '图书管理系统', '0.02', 1476674789, 0, 1495862700);
+INSERT INTO `think_config` (`id`, `title`, `price`, `count`, `time`, `date`, `status`, `dates`) VALUES
+(1, '图书管理系统', '0.01', 10, 15, 1476674789, 0, 1496075974);
 
 -- --------------------------------------------------------
 
@@ -191,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `think_reader` (
 
 INSERT INTO `think_reader` (`id`, `read_no`, `read_name`, `read_class`, `read_contac`, `read_status`, `read_time`, `dates`) VALUES
 (3, '755OQJCNVA8', '刘海', '信息管理15级移动C', '13584866592', 0, 1495759190, 1495761113),
-(4, '755OQJBE6F5', '吴桐', '经管14级财务C', '15698546592', 0, 1495759469, 0),
+(4, '755OQQ2UB93', '吴桐', '经管14级财务C', '15698546592', 0, 1495759469, 1496074976),
 (6, '755OQJBQ0F3', '柳岩', '经管系14级财务A', '13584866592', 0, 1495759669, 1495759891);
 
 --
@@ -208,6 +228,12 @@ ALTER TABLE `think_admin`
 -- Indexes for table `think_book`
 --
 ALTER TABLE `think_book`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `think_borrow`
+--
+ALTER TABLE `think_borrow`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -250,6 +276,11 @@ ALTER TABLE `think_admin`
 --
 ALTER TABLE `think_book`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自增长',AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `think_borrow`
+--
+ALTER TABLE `think_borrow`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键';
 --
 -- AUTO_INCREMENT for table `think_category`
 --
