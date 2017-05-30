@@ -7,16 +7,28 @@
         <div class="widget-body">
             <form id="togglingForm" action="__URL__/add_handler" method="post" enctype="multipart/form-data" class="form-horizontal" autocomplete="off">
                 <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">借书时长<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-3 col-md-3 col-xs-6">
+                        <input type="text" name="time" value="<notempty name="info">{$info.time}</notempty>" class="form-control" placeholder="n天(默认：20天)"/>
+                        <input type="hidden" name="id"  value="<notempty name="info">{$info.id}</notempty>" />
+                    </div>
+                </div>
+				<div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">最大数量<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-3 col-md-3 col-xs-6">
+                        <input type="text" name="count" value="<notempty name="info">{$info.count}</notempty>" class="form-control" placeholder="最大借书数(默认：10本)"/>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-md-2 col-lg-2 control-label">逾期金额<sup class="text-danger">*</sup></label>
                     <div class="col-lg-3 col-md-3 col-xs-6">
-                        <input type="text" name="price" value="<notempty name="info">{$info.price}</notempty>" class="form-control" placeholder="元/每天"/>
-                        <input type="hidden" name="id"  value="<notempty name="info">{$info.id}</notempty>" />
+                        <input type="text" name="price" value="<notempty name="info">{$info.price}</notempty>" class="form-control" placeholder="元/每天(默认：0.01元)"/>
                     </div>
                 </div>
                 <hr class="wide" />
                 <div class="form-group">
                     <div class="col-lg-4 col-md-4 col-lg-offset-2">
-                        <button type="submit" class="btn btn-danger col-lg-2">确认修改</button>
+                        <button type="submit" class="btn btn-danger col-lg-3">确认修改</button>
                         <!--<button type="button" class="btn btn-warning col-lg-2 ml10" onclick="window.location.reload()">返回</button>-->
                     </div>
                 </div>
@@ -25,10 +37,6 @@
     </div>
 </div>
 <js file="__JS__/validation/bootstrapValidator.js"/>
-<js type="text/javascript" file="__PLUG__/jquery.han2pin.min.js"/>
-<script src="__JS__/colorpicker/jquery.minicolors.js"></script>
-<link rel="stylesheet" href="__PLUG__/Uploadify/uploadify.css" />
-<script type="text/javascript" src="__PLUG__/Uploadify/jquery.uploadify.min.js"></script>
 <script type="text/javascript">
     $(function(){
         $('#togglingForm').bootstrapValidator({
@@ -54,17 +62,24 @@
                 });
             },
             fields: {
-                title: {
+                time: {
                     validators: {
                         notEmpty: {
-                            message: '请输入网站名称'
+                            message: '请输入借书时长'
                         }
                     }
                 },
-                url:{
+                count: {
                     validators: {
                         notEmpty: {
-                            message: '请输入域名'
+                            message: '请输入借书数量'
+                        }
+                    }
+                },
+                price:{
+                    validators: {
+                        notEmpty: {
+                            message: '请输入逾期金额'
                         }
                     }
                 },
@@ -80,8 +95,8 @@
             }
         });
         $('input[name="price"]').on('blur',function(){
-        	let p = parseFloat($(this).val());
-        	$(this).val(p.toFixed(2));
+        	let p = $(this).val()!=''?parseFloat($(this).val()).toFixed(2):'';
+        	$(this).val(p);
         });
     });
 </script>

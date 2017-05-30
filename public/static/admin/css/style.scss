@@ -13,6 +13,11 @@ $color: #fff red orange #428bca;
             line-height:80px;
             color:nth($color,1);
         }
+        a{
+            &:hover{
+              opacity:.7;  
+            }
+        }
         .bookmark01{
             width:250px;
             height:350px;
@@ -29,10 +34,24 @@ $color: #fff red orange #428bca;
         }
         .bookmark03{
             width:250px;
-            height:200px;
-            line-height:200px;
+            height:350px;
+            line-height:350px;
             background-color:darken(nth($color,4),10%);
             float:left;
         }
+    }
+}
+.search{
+    margin-top:40px;
+    input{
+        height:30px;
+        line-height:30px;
+        line-height:30px;
+    }
+    .packages{
+       .pachage{
+           height:30px;
+           line-height:30px;
+       }
     }
 }

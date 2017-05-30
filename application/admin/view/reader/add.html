@@ -2,7 +2,7 @@
 <div class="col-lg-12 col-sm-12 col-xs-12">
     <div class="widget  radius-bordered">
         <div class="widget-header">
-            <span class="widget-caption">控制器操作</span>
+            <span class="widget-caption">{$model.name}</span>
         </div>
         <div class="widget-body">
             <form id="togglingForm" action="__URL__/add_handler" method="post" class="form-horizontal" autocomplete="off">
@@ -120,10 +120,10 @@
                         notEmpty: {
                             message: '请输入联系方式'
                         },
-                        phone: {
-                            country: 'CN',
-                            message: '请输入正确的手机号'
-                        }
+						regexp:{
+							regexp:/^1[3|4|5|8][0-9]\d{4,8}$/,
+							message:'请输入正确的手机号'
+						}
                     }
                 },
                 read_no: {

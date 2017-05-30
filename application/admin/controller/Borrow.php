@@ -34,86 +34,22 @@ class Borrow extends Base{
 			's_date'=>!empty($param['s_date'])?$param['s_date']:'',
 			's_status'=>!empty($param['s_status'])?$param['s_status']:''
 		]);
-		$list = db('category')->where($where)->order('cate_date desc')->paginate(10);
+		$list = db('borrow')->where($where)
+		->alias('a')
+		->join('think_book b','a.bor_rid = b.id','LEFT')
+		->join('think_reader r','a.bor_rid = r.id','LEFT')
+		->field('a.id,a.bor_rid,a.bor_bid,a.bor_count,a.bor_date,a.bor_gdate,a.bor_status,a.bor_notify,b.book_name,b.book_no,r.read_no,r.read_name')
+		->order('bor_date desc')->paginate(10);
 		//p(db('category')->where($where)->fetchSql(true)->select());die;
 		// 查询状态为1的用户数据 并且每页显示10条数据
-		$count = db('category')->where($where)->count('*');
+		$count = db('borrow')->where($where)->count('*');
 		$this->assign('count',$count);
 		$this->assign('model',$model);
 		$this->assign('list',$list);
 		return view();
 	}
 
-	public function books(){
-		$model = ['name'=>$this->m['name']];
-		$where=[];
-		if(empty($param)){
-			$param = request()->param();
-		}
-		if(!empty($param['s_keywords'])){
-			$where['book_name']=['like',"%".$param['s_keywords']."%"];
-		}
-		if(!empty($param['s_status']) && $param['s_status']!=-1){
-			$where['book_status']=$param['s_status'];
-		}
-		if(!empty($param['s_date'])){
-			$date = explode('-',$param['s_date']);
-			$where['book_date']=['between time',[strtotime($date[0]),strtotime("$date[1] + 24 hour")]];
-		}
-		
-		$this->assign('search',[
-			's_keywords'=>!empty($param['s_keywords'])?$param['s_keywords']:'',
-			's_date'=>!empty($param['s_date'])?$param['s_date']:'',
-			's_status'=>!empty($param['s_status'])?$param['s_status']:''
-		]);
-		
-		$list = db('book')->alias('a')->where($where)->join('think_category c','a.book_cate = c.id','LEFT')
-		->field('a.id,a.book_name,a.book_desc,a.book_no,a.book_author,a.book_publish,a.book_cate,a.book_price,a.book_mark,a.book_totals,a.book_given,a.book_left,a.book_status,a.book_date,c.cate_name')->order('book_date desc')->paginate(10);
-		
-		$count = db('book')->where($where)->count('*');
-		$this->assign('count',$count);
-		$this->assign('model',$model);
-		$this->assign('list',$list);
-		return view();
-	}
-
-
-	public function borrow($id=0){
-		$model = ['name'=>$this->m['name']];
-		$where=[];
-		if(empty($param)){
-			$param = request()->param();
-		}
-		if(!empty($param['s_keywords'])){
-			$where['book_name']=['like',"%".$param['s_keywords']."%"];
-		}
-		if(!empty($param['s_status']) && $param['s_status']!=-1){
-			$where['book_status']=$param['s_status'];
-		}
-		if(!empty($param['s_date'])){
-			$date = explode('-',$param['s_date']);
-			$where['book_date']=['between time',[strtotime($date[0]),strtotime("$date[1] + 24 hour")]];
-		}
-		
-		$this->assign('search',[
-			's_keywords'=>!empty($param['s_keywords'])?$param['s_keywords']:'',
-			's_date'=>!empty($param['s_date'])?$param['s_date']:'',
-			's_status'=>!empty($param['s_status'])?$param['s_status']:''
-		]);
-		
-		$list = db('book')->alias('a')->where($where)->join('think_category c','a.book_cate = c.id','LEFT')
-		->field('a.id,a.book_name,a.book_desc,a.book_no,a.book_author,a.book_publish,a.book_cate,a.book_price,a.book_mark,a.book_totals,a.book_given,a.book_left,a.book_status,a.book_date,c.cate_name')->order('book_date desc')->paginate(10);
-		
-		$count = db('book')->where($where)->count('*');
-		$this->assign('count',$count);
-		$this->assign('model',$model);
-		$this->assign('list',$list);
-		return view();
-	}
-
-
-	
-	public function add_book($id=0){
+	public function add_borrow($id=0){
 		$model = ['name'=>$this->m['name']];
 		$type = 0;
 		if($id){

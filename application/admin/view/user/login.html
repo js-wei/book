@@ -60,8 +60,8 @@ Purchase: http://wrapbootstrap.com
     <script src="__JS__/jquery-2.0.3.min.js"></script>
     <script src="__JS__/bootstrap.min.js"></script>
     <script src="__JS__/validation/bootstrapValidator.js"></script>
-   	<link rel="stylesheet" type="text/css" href="__PLUG__/layui/css/layui.css"/>
-    <script src="__PLUG__/layui/layui.js"></script>
+   	<link rel="stylesheet" type="text/css" href="__PLUG__/layui/build/css/layui.css"/>
+    <script src="__PLUG__/layui/build/layui.js"></script>
     <script type="text/javascript">
         $(function(){
         	layui.use('layer', function(){
@@ -111,7 +111,7 @@ Purchase: http://wrapbootstrap.com
 	                    $.post($('form').attr('action'),$('form').serialize(),function(result){
 	                        layer.close(index);
 	                        if(result.status==0){
-	                             layer.alert(result.msg,{icon:5});
+	                            layer.alert(result.msg,{icon:5});
 	                        }else{
 	                            layer.alert(result.msg,{icon:6,end:function(){
 	                                window.location.href=result.redirect;

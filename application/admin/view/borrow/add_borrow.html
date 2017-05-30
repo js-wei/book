@@ -1,0 +1,214 @@
+<include file="public/header" title="{$model.name}" keywords="{$model.name}"/>
+<div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="widget  radius-bordered">
+        <div class="widget-header">
+            <span class="widget-caption">{$model.name}</span>
+        </div>
+        <div class="widget-body">
+            <form id="togglingForm" action="__URL__/add_book_handler" method="post" class="form-horizontal" autocomplete="off">
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">书籍分类<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-2">
+                    	<select name="book_cate">
+                      		<option value="">--请选择分类--</option>
+                      		<volist name="cate" id="ct">
+                      			<option value="{$ct.id}" <notempty name="info"><eq name="ct.id" value="$info.book_cate">selected</eq></notempty>>{$ct.cate_name}</option>
+                      		</volist>
+                      	</select>
+                        <input type="hidden" name="id" value="<notempty name='info'>{$info.id}</notempty>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">书籍名<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-3">
+                      	<input type="text" name="book_name" value="<notempty name="info">{$info.book_name}</notempty>" class="form-control" placeholder="书籍名"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">作者<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-3">
+                      	<input type="text" name="book_author" value="<notempty name="info">{$info.book_author}</notempty>" class="form-control" placeholder="作者"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">出版社<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-3">
+                      	<input type="text" name="book_publish" value="<notempty name="info">{$info.book_publish}</notempty>" class="form-control" placeholder="出版社"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">简介</label>
+                    <div class="col-lg-3">
+                      	<textarea name="book_desc" rows="6" class="form-control"  placeholder="简介"><notempty name="info">{$info.book_desc}</notempty></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">书架<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-3">
+                      	<input type="text" name="book_mark" value="<notempty name="info">{$info.book_mark}</notempty>" class="form-control" placeholder="价格"/>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">价格<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-2">
+                      	<input type="text" name="book_price" value="<notempty name="info">{$info.book_price}</notempty>" class="form-control" placeholder="价格"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">库存<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-2">
+                      	<input type="text" name="book_totals" value="<notempty name="info">{$info.book_totals}</notempty>" class="form-control" placeholder="库存"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">借出</label>
+                    <div class="col-lg-2">
+                      	<input type="text" name="book_given" value="<notempty name="info">{$info.book_given}<else />0</notempty>" class="form-control" placeholder="借出"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">剩余</label>
+                    <div class="col-lg-2">
+                      	<input type="text" name="book_left" value="<notempty name="info">{$info.book_left}</notempty>" class="form-control" placeholder="剩余"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">分类状态</label>
+                    <div class="col-lg-6">
+                        <div class="radio pull-left">
+                            <label>
+                                <input name="book_status" type="radio" value="0" class="colored-success" <notempty name="info"><eq name="info.book_status" value="0">checked="checked"</eq><else />checked="checked"</notempty>>
+                                <span class="text">正常</span>
+                            </label>
+                        </div>
+                        <div class="radio pull-left">
+                            <label>
+                                <input name="book_status" type="radio" value="1" class="colored-warning" <notempty name="info"><eq name="info.book_status" value="1">checked="checked"</eq></notempty>>
+                                <span class="text">禁用</span>
+                            </label>
+                        </div>
+                        <div class="radio hide">
+                            <label>
+                                <input name="book_status" type="radio" class="colored-blueberry">
+                                <span class="text"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr class="wide" />
+                <div class="form-group">
+                    <div class="col-lg-4 col-lg-offset-2">
+                        <button type="submit" class="btn btn-danger col-lg-2">提交</button>
+                        <button type="button" class="btn btn-warning col-lg-2 ml10" onclick="window.history.go(-1);">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<js file="__JS__/validation/bootstrapValidator.js"/>
+<js type="text/javascript" file="__PLUG__/jquery.han2pin.min.js"/>
+<script type="text/javascript">
+	$(function(){
+        $('#Pinyin').click(function(){
+            if($('#name').val()==''){
+                layer.alert('请输入控制器名称',{icon:5});
+                return false;
+            }else{
+                $('#title').val($.trimAll($('#name').toPinyin()));
+                $('.control-name').hide();
+            }
+        });
+		$('#togglingForm').bootstrapValidator({
+            message: '验证没有通过',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            submitHandler: function (validator, form, submitButton) {
+                var index = layer.load(2,{
+                    shade: [0.4,'#000'] //0.1透明度的白色背景
+                });
+                $.post(form.attr('action'),form.serialize(),function(data){
+                    layer.close(index);
+                    if(data.status==1){
+                        layer.alert(data.msg,{icon:6,end:function(){
+                            location.href = data.redirect;
+                        }});
+                    }else {
+                        layer.alert(data.msg,{icon:5});
+                    }
+                });
+            },
+            fields: {
+            	book_cate:{
+            		validators: {
+                        notEmpty: {
+                            message: '请选择书籍分类'
+                        }
+                    }
+            	},
+                book_name: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入书籍名称'
+                        }
+                    }
+                },
+                book_author: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入作者姓名'
+                        }
+                    }
+                },
+                book_publish: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入出版社'
+                        }
+                    }
+                },
+                book_mark: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入所在书架'
+                        }
+                    }
+                },
+                book_price: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入书籍价格'
+                        }
+                    }
+                },
+                book_totals: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入书籍库存'
+                        }
+                    }
+                }
+            }
+        })
+        .find('button[data-toggle]')
+        .on('click', function () {
+            var $target = $($(this).attr('data-toggle'));
+            $target.toggle();
+            if (!$target.is(':visible')) {
+                $('#togglingForm').data('bootstrapValidator').disableSubmitButtons(false);
+            }
+        });
+        $('input[name="book_totals"]').on('keyup',function(e){
+        	$('input[name="book_left"]').val($(this).val());
+        });
+        $('input[name="book_price"]').on('blur',function(e){
+        	var price = parseFloat($(this).val());
+        	price = price.toFixed(2);
+        	$(this).val(price);
+        });
+	});
+</script>
+<include file="public/footer"/>
