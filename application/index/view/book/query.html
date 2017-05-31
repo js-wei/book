@@ -39,9 +39,9 @@
 				<notempty name="list">
 					<volist name="list" id="vo">
 						<div class="col-lg-2 col-md-2 col-xs-6" data-role='{$vo.id}'>
-							<h2>
+							<h5>
 								书名：{$vo['book_name']}
-							</h2>
+							</h5>
 							<p>
 								作者：{$vo['book_author']}
 							</p>
@@ -80,14 +80,16 @@
 									content:'__URL__/check_no?_='+Math.random()
 								});
 							}});
-						}else{
+						}else if(result.status==1){
 							$html = '<div class="col-lg-2 col-md-2 col-xs-6 blist" data-role="'+result['data'].id+'">'
 									+result['data'].book_name
-									+'<input type="text" name="num['+result['data'].id+']" value="1">'
+									+'<input type="text" name="num['+result['data'].id+']" value="1" class="disabled">'
 									+'<a href="javascript:void(0);" class="minus"><i class="fa fa-minus pull-right"></i></a></div>';
 							$('.package').append($html);
 							$('.packages').show();
 							pl.empty().text('已加入书包').addClass('disabled');
+						}else{
+							layer.alert(result.msg,{icon:5});
 						}
 					});
 				});
@@ -130,6 +132,8 @@
 			                      btn: ['是的确定','不没想好'] //按钮
 			                   }, function(){
 			                       window.location.href=result.redirect;
+			                    },function(){
+			                    	window.location.reload();
 			                    });
 					  		}
 						  }

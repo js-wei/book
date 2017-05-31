@@ -2,8 +2,91 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>图书查询</title>
+		<link href="__CSS__/bootstrap.min.css" rel="stylesheet" />
+	    <link href="__CSS__/font-awesome.min.css" rel="stylesheet" />
+	    <script src="__JS__/jquery-2.0.3.min.js"></script>
+	    <script src="__JS__/bootstrap.min.js"></script>
+	    <link rel="stylesheet" type="text/css" href="__PLUG__/layui/css/layui.css"/>
+	    <script src="__PLUG__/layui/layui.js"></script>
+	    <link rel="stylesheet" type="text/css" href="__CSS__/style.css"/>
 	</head>
 	<body>
+		<div class="container-fluid search">
+			<form action="__SELF__" method="get" autocomplete="off" class="form-inline">
+				<div class="form-group">
+					<label for="q">你的卡号:</label>
+					<input type="text" name="q" value="{$q}" placeholder="请输入借书卡号"/>
+					<input type="hidden" name="p" value="{$p}" />
+				</div>
+				<button type="submit" class="btn btn-primary">提交</button>
+			</form>
+			<hr/>
+			<div class="book-list">
+				<notempty name="list">
+					<volist name="list" id="vo">
+						<div class="col-lg-2 col-md-2 col-xs-6" data-role='{$vo.id}' style="margin-top:10px;">
+							<h4>
+								书名：{$vo['book_name']}
+							</h4>
+							<p>
+								作者：{$vo['book_author']}
+							</p>
+							<p>
+								出版社：{$vo['book_publish']}
+							</p>
+							<p>
+								本数：{$vo['bor_count']}
+							</p>
+							<p>
+								借书日期：{$vo['bor_date']|date="Y-m-d",###}
+							</p>
+							<p>
+								还书日期：{$vo['bor_gdate']|date="Y-m-d",###}
+							</p>
+							<hr />
+						</div>
+						
+					</volist>
+					<div class="mt10">
+	                	{$list->render()}
+	                </div>
+				</notempty>
+			</div>
+		</div>
 	</body>
+	<script type="text/javascript">
+		$(function(){
+			layui.use('layer', function(){
+				$('.plus').on('click',function(e){
+					e.preventDefault();
+					var pl = $(this);
+					let id = $(this).attr('data-role');
+					if($(this).hasClass('disabled')){
+						return '';
+					}
+					$.post('__URL__/add_session',{id:id},function(result){
+						if(result.status==-1){
+							layer.alert(result.msg,{title:'错误提示',icon:5,end:function(){
+								layer.open({
+									type: 2,
+									title:'查看图片',
+									area: ['750px', '450px'], //宽高
+									content:'__URL__/check_no?_='+Math.random()
+								});
+							}});
+						}else{
+							$html = '<div class="col-lg-2 col-md-2 col-xs-6 blist" data-role="'+result['data'].id+'">'
+									+result['data'].book_name
+									+'<input type="text" name="num['+result['data'].id+']" value="1">'
+									+'<a href="javascript:void(0);" class="minus"><i class="fa fa-minus pull-right"></i></a></div>';
+							$('.package').append($html);
+							$('.packages').show();
+							pl.empty().text('已加入书包').addClass('disabled');
+						}
+					});
+				});
+			});
+		});
+	</script>
 </html>

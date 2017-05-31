@@ -16,11 +16,9 @@
             </div>
             <div class="widget-body">
                 <div class="col-xs-4 col-md-6 pb10 zindex">
-                    <a href="__URL__/add_book?aid={:input('aid')}" class="btn btn-success">添加{$model.name}</a>
-                    <a href="__URL__/book_status" data-role="forbidden" class="btn btn-warning status">选中禁用</a>
-                    <a href="__URL__/book_status" data-role="enable" class="btn btn-info status">选中启用</a>
-                    <a href="__URL__/book_status" data-role="delete-all" class="btn btn-danger status">选中删除</a>
-                	<include file="public/search" title="书籍名称/作者" date="添加日期">
+                	<!--<a href="__URL__/add_borrow" class="btn btn-success">添加借书</a>-->
+                    <a href="__URL__/cate_status" data-role="delete-all" class="btn btn-danger status">选中删除</a>
+                	<include file="public/search" title="书名" date="借书日期" option="1">
                 </div>
                 <table class="table table-striped table-bordered table-hover pt10" id="simpledatatable">
                     <thead>
@@ -34,16 +32,12 @@
                                 </div>
                             </th>
                             <th>书名</th>
-                            <th class="hidden-xs">作者</th>
-                            <th class="hidden-xs">简介</th>
-                            <th class="hidden-xs">价格</th>
-                            <th class="hidden-xs">出版社</th>
-                            <th class="hidden-xs">分类</th>
-                            <!--<th class="hidden-xs">书架</th>-->
-                            <th class="hidden-xs">库存</th>
-                            <!--<th class="hidden-xs">借出</th>
-                            <th class="hidden-xs">剩余</th>-->
-                            <th class="hidden-xs">添加时间</th>
+                            <!--<th class="hidden-xs">书号</th>-->
+                            <th>借书人</th>
+                            <th class="hidden-xs">借书号</th>
+                            <th class="hidden-xs">数量</th>
+                            <th class="hidden-xs">借书日期</th>
+                            <th class="hidden-xs">归还日期</th>
                             <th>状态</th>
                             <th>操作</th>
                         </tr>
@@ -59,52 +53,33 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td class="hidden-xs">
+                                <td class="tips" data-role = "{$vo.book_name}">
                                     {$vo.book_name}
                                 </td>
-                                <td class="tips hidden-xs" data-role = "{$vo.book_author}">
-                                    {$vo.book_author|sub_str=0,10}
-                                </td>
-                                <td class="tips hidden-xs" data-role = "{$vo.book_desc}">
-                                    {$vo.book_desc|sub_str=0,10}
-                                </td>
-                                <td class="hidden-xs">
-                                    {$vo.book_price}
-                                </td>
-                                <td class="hidden-xs">
-                                    {$vo.book_publish}
-                                </td>
-                                <td class="hidden-xs">
-                                    {$vo.cate_name}
-                                </td>
-                                <!--<td class="hidden-xs">
-                                    {$vo.book_mark}
+                                <!--<td class="tips" data-role = "{$vo.book_no}">
+                                    {$vo.book_no}
                                 </td>-->
-                                <td class="hidden-xs">
-                                    {$vo.book_totals}
+                                <td class="tips" data-role = "{$vo.read_name}">
+                                    {$vo.read_name}
                                 </td>
-                                <!--<td class="hidden-xs">
-                                    {$vo.book_given}
+                                <td class="tips" data-role = "{$vo.read_no}">
+                                    {$vo.read_no}
+                                </td>
+                                <td class="">
+                                    {$vo.bor_count}
                                 </td>
                                 <td class="hidden-xs">
-                                    {$vo.book_left}
-                                </td>-->
-                                <td class="hidden-xs">
-                                   {$vo.book_date|date='Y-m-d H:i:s',###}
+                                   {$vo.bor_date|date='Y-m-d H:i:s',###}
+                                </td>
+                                 <td class="hidden-xs">
+                                   {$vo.bor_gdate|date='Y-m-d H:i:s',###}
                                 </td>
                                 <td>
-                                   <eq name="vo.book_status" value="0"><span class="text-success">正常</span></eq>
-                                   <eq name="vo.book_status" value="1"/><span class="text-danger">禁用</span> </eq>
+                                   <eq name="vo.bor_status" value="0"><span class="text-danger">未还</span></eq>
+                                   <eq name="vo.bor_status" value="1"/><span class="text-success">已还</span> </eq>
                                 </td>
                                 <td>
-                                    <a href="__URL__/add_book?id={$vo['id']}&aid={:input('aid')}">编辑</a>
-                                    <eq name="vo.book_status" value="0">
-                                    	<a href="__URL__/book_status&aid={:input('aid')}&p={:input('p')}" data-role="forbidden" data-id="{$vo.id}" class="status">禁用</a>
-                                    </eq>
-                                    <eq name="vo.book_status" value="1"/>
-                                    	<a href="__URL__/book_status&aid={:input('aid')}&p={:input('p')}" data-role="enable" data-id="{$vo.id}" class="status">正常</a>
-                                    </eq>
-                                    <a href="__URL__/book_status" data-role="delete"  data-id="{$vo.id}" class="status">删除</a>
+                                    <a href="__URL__/bor_status" data-role="delete"  data-id="{$vo.id}" class="status">删除</a>
                                 </td>
                             </tr>
                         </volist>
@@ -141,14 +116,12 @@
             },
             "aoColumns": [
                 { "bSortable": false },
-                { "bSortable": false },
-                { "bSortable": false },
+                { "bSortable": true },
+                { "bSortable": true },
                 { "bSortable": false },
                 { "bSortable": false },
                 { "bSortable": true },
                 { "bSortable": true },
-                { "bSortable": true },
-                { "bSortable": false },
                 { "bSortable": false },
                 { "bSortable": false }
             ],

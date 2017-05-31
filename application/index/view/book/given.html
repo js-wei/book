@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图书归还</title>
+		<link href="__CSS__/bootstrap.min.css" rel="stylesheet" />
+	    <link href="__CSS__/font-awesome.min.css" rel="stylesheet" />
+	    <script src="__JS__/jquery-2.0.3.min.js"></script>
+	    <script src="__JS__/bootstrap.min.js"></script>
+	    <link rel="stylesheet" type="text/css" href="__PLUG__/layui/css/layui.css"/>
+	    <script src="__PLUG__/layui/layui.js"></script>
+	    <js file="__JS__/validation/bootstrapValidator.js"/>
+	    <link rel="stylesheet" type="text/css" href="__CSS__/style.css"/>
+	</head>
+	<body>
+		<div class="container-fluid search">
+			<div class="col-lg-4 col-md-4 col-xs-12 col-lg-offset-3 col-md-offset-3 col-xs-offset-0 form-panel">
+				<h2>还书</h2>
+				<hr />
+				<form action="__URL__/give_books" autocomplete="off" id="togglingForm">
+					<div class="form-group">
+						<label >书号：</label>
+						<input type="type" name="no" class="form-control" placeholder="请输入书名"/>
+					</div>
+					<div class="form-group">
+						<label >卡号：</label>
+						<input type="type" name="rid" class="form-control" placeholder="请输入借书号"/>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">还书</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		$(function(){
+	        layui.use('layer',function(){
+	        	$('#togglingForm').bootstrapValidator({
+		            message: '验证没有通过',
+		            feedbackIcons: {
+		                valid: 'glyphicon glyphicon-ok',
+		                invalid: 'glyphicon glyphicon-remove',
+		                validating: 'glyphicon glyphicon-refresh'
+		            },
+		            submitHandler: function (validator, form, submitButton) {
+		                var index = layer.load(2,{
+		                    shade: [0.4,'#000'] //0.1透明度的白色背景
+		                });
+		                $.post(form.attr('action'),form.serialize(),function(data){
+		                    layer.close(index);
+		                    if(data.status==1){
+		                        layer.alert(data.msg,{icon:6,end:function(){
+		                          window.location.reload();
+		                        }});
+		                    }else {
+		                        layer.alert(data.msg,{icon:5});
+		                    }
+		                });
+		            },
+		            fields: {
+		                no: {
+		                    validators: {
+		                        notEmpty: {
+		                            message: '请输入书名'
+		                        }
+		                    }
+		                },
+		                tel: {
+		                    validators: {
+		                        notEmpty: {
+		                            message: '请输入借书号'
+		                        }
+		                    }
+		                }
+		            }
+		        })
+		        .find('button[data-toggle]')
+		        .on('click', function () {
+		            var $target = $($(this).attr('data-toggle'));
+		            $target.toggle();
+		            if (!$target.is(':visible')) {
+		                $('#togglingForm').data('bootstrapValidator').disableSubmitButtons(false);
+		            }
+		        });
+	        });
+	    });
+	</script>
+</html>

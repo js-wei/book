@@ -23,6 +23,7 @@ class Base extends Controller{
 		//输出导航
 		$this->assign('site',$this->site);
 		$this->assign('nav',$nav);
+		$this->assign('option',0);
 		$this->assign('action',strtolower($this->action));
 		$this->assign('controller',strtolower($this->controller));
 		$this->assign('module',strtolower($this->module));
@@ -117,24 +118,24 @@ class Base extends Controller{
             case 'enable':            //启用
                 $result = $m->where($where)->update(array($prf.'status'=>0));
                 if(!$result){
-                    return ['status'=>0,'msg'=>'启用失败'];
+                    return ['status'=>0,'msg'=>'操作失败'];
                 }else{
-                   return ['status'=>1,'msg'=>'启用成功','redirect'=>$redirect];
+                   return ['status'=>1,'msg'=>'操作成功','redirect'=>$redirect];
                 }
                 break;
             case 'forbidden':        //禁用
                 $result = $m->where($where)->update(array($prf.'status'=>1));
                 if(!$result){
-                   return ['status'=>0,'msg'=>'禁用失败'];
+                   return ['status'=>0,'msg'=>'操作失败'];
                 }
-                return ['status'=>1,'msg'=>'禁用成功','redirect'=>$redirect];
+                return ['status'=>1,'msg'=>'操作成功','redirect'=>$redirect];
                 break;
 			case 'lost':
 				$result = $m->where($where)->update(array($prf.'status'=>2));
                 if(!$result){
-                    return ['status'=>0,'msg'=>'挂失失败'];
+                    return ['status'=>0,'msg'=>'操作失败'];
                 }else{
-                   return ['status'=>1,'msg'=>'挂失成功','redirect'=>$redirect];
+                   return ['status'=>1,'msg'=>'操作成功','redirect'=>$redirect];
                 }
 				break;
             case 'delete':           //删除
@@ -147,11 +148,11 @@ class Base extends Controller{
                 if($flag){
                     $result = $m->where($where)->delete();
                     if(!$result){
-                        return ['status'=>0,'msg'=>'删除失败'];
+                        return ['status'=>0,'msg'=>'操作失败'];
                     }
-                    return ['status'=>1,'msg'=>'删除成功','redirect'=>$redirect];
+                    return ['status'=>1,'msg'=>'操作成功','redirect'=>$redirect];
                 }else{
-                    return ['status'=>0,'msg'=>'删除失败'];
+                    return ['status'=>0,'msg'=>'操作失败'];
                 }
                 break;
         }

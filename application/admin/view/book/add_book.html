@@ -19,6 +19,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-lg-2 col-xs-3 col-md-3 control-label">书号<sup class="text-danger">*</sup></label>
+                    <div class="col-lg-3">
+                      	<input type="text" name="book_no" value="<notempty name="info">{$info.book_no}</notempty>" class="form-control" placeholder="书籍名"/>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-lg-2 col-xs-3 col-md-3 control-label">书籍名<sup class="text-danger">*</sup></label>
                     <div class="col-lg-3">
                       	<input type="text" name="book_name" value="<notempty name="info">{$info.book_name}</notempty>" class="form-control" placeholder="书籍名"/>
@@ -146,6 +152,13 @@
             		validators: {
                         notEmpty: {
                             message: '请选择书籍分类'
+                        }
+                    }
+            	},
+            	book_no:{
+            		validators: {
+                        notEmpty: {
+                            message: '请输入书号'
                         }
                     }
             	},
