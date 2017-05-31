@@ -22,11 +22,9 @@ class Setting extends Base{
 		if(empty($id) || empty($price)){
 			return ['status'=>0,'msg'=>'参数错误'];
 		}
-		if(!db('config')->update([
-			'id'=>$id,
-			'price'=>$price,
-			'dates'=>time()
-		])){
+		$params = request()->param();
+		$params['dates']=time();
+		if(!db('config')->update($params)){
 			return ['status'=>0,'msg'=>'修改失败'];
 		}
 		return ['status'=>1,'msg'=>'修改成功','redirect'=>Url('punish')];
